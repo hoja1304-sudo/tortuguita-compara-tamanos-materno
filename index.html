@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tortuguita compara tamaños Materno</title>
+<script>/* voz español neutro (seseo) */(function(){if(!window.SpeechSynthesisUtterance||window.__seseo)return;window.__seseo=1;function s(t){return t==null?t:(""+t).replace(/z/g,"s").replace(/Z/g,"S").replace(/c(?=[eiéíEIÉÍ])/g,"s").replace(/C(?=[eiéíEIÉÍ])/g,"S");}try{var p=SpeechSynthesisUtterance.prototype,d=Object.getOwnPropertyDescriptor(p,"text");if(d&&d.set&&d.get){Object.defineProperty(p,"text",{configurable:true,enumerable:d.enumerable,get:d.get,set:function(v){d.set.call(this,s(v));}});}}catch(e){}var O=window.SpeechSynthesisUtterance;function N(t){return arguments.length?new O(s(t)):new O();}N.prototype=O.prototype;try{window.SpeechSynthesisUtterance=N;}catch(e){}})();</script>
+<style>
+  :root{ --ink:#24324a; --soft:#5d6b82; --main:#ff8a3d; --main2:#e86a1c; --card:#fff; --line:#d8e3ef; }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:linear-gradient(180deg,#c9ecff,#eaf8de);color:var(--ink);
+    font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;-webkit-tap-highlight-color:transparent;
+    -webkit-user-select:none;user-select:none}
+  button{font-family:inherit;cursor:pointer}
+  .hidden{display:none!important}
+  .btn:focus-visible,.ibtn:focus-visible,.obj:focus-visible{outline:4px solid #3a86ff;outline-offset:4px}
+
+  /* ---------- Inicio ---------- */
+  #inicio{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .card{background:var(--card);border-radius:28px;box-shadow:0 14px 40px rgba(30,60,90,.18);
+    padding:clamp(18px,4vw,36px);width:min(580px,100%);text-align:center}
+  .kicker{display:inline-block;background:#fff1e4;color:#c4520e;font-weight:700;border-radius:999px;padding:6px 16px;font-size:clamp(14px,2.4vw,17px)}
+  h1{margin:12px 0 4px;font-size:clamp(28px,6.4vw,46px);line-height:1.1;color:#1f6b3d}
+  .sub{margin:6px 0 16px;color:var(--soft);font-size:clamp(15px,2.8vw,19px)}
+  .portada{display:flex;align-items:flex-end;justify-content:center;gap:clamp(8px,3vw,22px);height:clamp(110px,26vw,170px);margin:14px 0 6px}
+  .portada svg{height:100%;width:auto}
+  .btn{border:0;border-radius:999px;font-weight:800;min-height:60px;padding:12px 34px;font-size:clamp(20px,4vw,26px);color:#fff;
+    background:linear-gradient(180deg,var(--main),var(--main2));box-shadow:0 6px 0 #b84f10,0 10px 20px rgba(0,0,0,.15)}
+  .btn:active{transform:translateY(3px);box-shadow:0 3px 0 #b84f10}
+  .ayuda{margin:16px 0 0;color:var(--soft);font-size:clamp(14px,2.6vw,16px);line-height:1.45}
+  .autoria{margin:18px 0 0;font-size:13px;color:#8a95a6;line-height:1.4}
+  .autoria strong{color:#6f7c8f;font-weight:600}
+
+  /* ---------- Juego ---------- */
+  #juego{position:fixed;inset:0;display:flex;flex-direction:column}
+  .barra{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px clamp(8px,2vw,16px)}
+  .ibtn{width:56px;height:56px;flex:0 0 56px;border-radius:50%;border:0;background:#fff;font-size:26px;
+    box-shadow:0 4px 0 #c9d4e2,0 6px 14px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center}
+  .ibtn.grande{width:78px;height:78px;flex-basis:78px;font-size:38px;background:#fff3e6;box-shadow:0 5px 0 #f0b98a,0 8px 18px rgba(0,0,0,.14)}
+  .ibtn.habla{animation:latido 1s ease-in-out infinite}
+  @keyframes latido{50%{transform:scale(1.08)}}
+  .escena{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,3vh,26px);padding:6px 12px 64px;min-height:0}
+  .modelo{display:flex;align-items:flex-end;justify-content:center;padding:12px 18px 8px;border-radius:24px;
+    background:#fffbe6;border:4px dashed #f2c94c;box-shadow:0 6px 16px rgba(0,0,0,.08);position:relative}
+  .modelo::before{content:"👀";position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:30px}
+  .huecos,.opciones{display:flex;align-items:flex-end;justify-content:center;flex-wrap:nowrap;gap:clamp(8px,2.4vw,24px)}
+  .hueco{border:4px dashed #9fb6cc;border-radius:20px;background:rgba(255,255,255,.55);display:flex;align-items:flex-end;justify-content:center;padding:6px}
+  .hueco.lleno{border-style:solid;border-color:#7cc68a;background:rgba(220,247,224,.7)}
+  .obj{border:0;background:rgba(255,255,255,.7);border-radius:22px;padding:8px;display:flex;align-items:flex-end;justify-content:center;
+    box-shadow:0 6px 0 #c9d4e2,0 10px 20px rgba(0,0,0,.1);transition:transform .15s,opacity .3s}
+  .obj:active{transform:translateY(3px)}
+  .obj svg{display:block}
+  .obj.mal{animation:sacude .45s}
+  .obj.bien{animation:salta .6s;background:#dcf7e0;box-shadow:0 6px 0 #7cc68a,0 0 0 6px #7cc68a55}
+  .obj.puesto{box-shadow:none;background:transparent;pointer-events:none}
+  @keyframes sacude{20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
+  @keyframes salta{40%{transform:translateY(-18px) scale(1.06)}}
+  .progreso{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:8px;
+    background:rgba(255,255,255,.85);padding:8px 12px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .progreso span{width:20px;height:20px;border-radius:50%;background:#e3e9f1;border:2px solid #cfd8e3}
+  .progreso span.hecho{background:#ffd21f;border-color:#c49a00}
+  #fuegos{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+
+  /* ---------- Final (sin texto: los niños aún no leen) ---------- */
+  #final{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(36,50,74,.35);z-index:6}
+  #final .card{width:min(440px,100%)}
+  .estrellas{font-size:clamp(46px,12vw,72px);letter-spacing:6px;margin:4px 0 12px}
+  .fila{display:flex;gap:18px;justify-content:center}
+  .fila .ibtn{width:84px;height:84px;flex-basis:84px;font-size:40px}
+</style>
+</head>
+<body>
+
+<!-- ============ INICIO ============ -->
+<section id="inicio" aria-labelledby="titulo">
+  <div class="card">
+    <span class="kicker">Educación Preescolar · Materno</span>
+    <div class="portada" id="portada" aria-hidden="true"></div>
+    <h1 id="titulo">Tortuguita compara tamaños</h1>
+    <p class="sub">Más grande, más pequeño, tan grande como, tan pequeño como, igual que y ordenar por tamaño.</p>
+    <button class="btn" id="btnJugar">▶ ¡A jugar!</button>
+    <p class="ayuda">El juego habla: escuchen la instrucción y toquen el objeto. Con el botón 🔊 se repite.</p>
+    <p class="autoria"><strong>Elaborado por: Alberto Jiménez Ruiz</strong><br>Asesor Regional de Matemática <span style="white-space:nowrap">DRE-Cartago-DAP-2026</span></p>
+  </div>
+</section>
+
+<!-- ============ JUEGO ============ -->
+<section id="juego" class="hidden" aria-label="Juego de tamaños">
+  <div class="barra">
+    <button class="ibtn" id="btnCasa" aria-label="Volver al inicio">🏠</button>
+    <button class="ibtn grande" id="btnRepetir" aria-label="Escuchar la instrucción otra vez">🔊</button>
+    <button class="ibtn" id="btnVoz" aria-label="Silenciar voz">🗣️</button>
+  </div>
+  <div class="escena" id="escena"></div>
+  <div class="progreso" id="progreso" aria-hidden="true"></div>
+  <p class="hidden" id="instruccion" role="status" aria-live="polite"></p>
+</section>
+
+<canvas id="fuegos" aria-hidden="true"></canvas>
+
+<!-- ============ FINAL ============ -->
+<section id="final" class="hidden" aria-label="¡Terminaste!">
+  <div class="card">
+    <div class="estrellas" aria-hidden="true">⭐⭐⭐</div>
+    <div class="fila">
+      <button class="ibtn" id="btnOtra" aria-label="Jugar otra vez">🔄</button>
+      <button class="ibtn" id="btnInicio" aria-label="Volver al inicio">🏠</button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  "use strict";
+  const $=s=>document.querySelector(s);
+
+  // ---------- Objetos (dibujos SVG, viewBox 100x100, apoyados abajo) ----------
+  const COLORES=["#e53935","#1e6fe0","#43b047","#ff8c1a","#8e44c9","#ffc400","#ec407a","#00a99d"];
+  const OBJ={
+    frasco:{sg:"frasco",pl:"frascos",g:"m",svg:c=>`<path d="M40 6h20v6h-3v24l27 52c3 6-1 12-8 12H24c-7 0-11-6-8-12l27-52V12h-3z" fill="#eef7ff" stroke="#5b6b80" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M31 58h38l14 29c2 4 0 7-5 7H22c-5 0-7-3-5-7z" fill="${c}"/><path d="M47 18v20" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/>`},
+    pelota:{sg:"pelota",pl:"pelotas",g:"f",svg:c=>`<circle cx="50" cy="52" r="46" fill="${c}" stroke="rgba(0,0,0,.25)" stroke-width="4"/>
+      <path d="M8 44c26 10 58 10 84 0M10 66c26 10 54 10 80 0" stroke="#fff" stroke-width="7" fill="none" opacity=".9"/><ellipse cx="34" cy="28" rx="11" ry="6" fill="#fff" opacity=".55" transform="rotate(-30 34 28)"/>`},
+    manzana:{sg:"manzana",pl:"manzanas",g:"f",svg:c=>`<path d="M50 24c-12-9-38-6-40 22-2 26 16 50 30 50 6 0 7-3 10-3s4 3 10 3c14 0 32-24 30-50-2-28-28-31-40-22z" fill="${c}" stroke="rgba(0,0,0,.25)" stroke-width="4"/>
+      <path d="M50 24c0-8 2-14 6-18" stroke="#6b4423" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M56 12c8-8 20-6 22-2-8 6-16 6-22 2z" fill="#3fbf5f"/><ellipse cx="30" cy="42" rx="7" ry="11" fill="#fff" opacity=".45"/>`},
+    estrella:{sg:"estrella",pl:"estrellas",g:"f",svg:c=>`<path d="M50 4l13 29 31 3-23 21 7 31-28-16-28 16 7-31L6 36l31-3z" fill="${c}" stroke="rgba(0,0,0,.25)" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="40" cy="48" r="4" fill="#24324a"/><circle cx="60" cy="48" r="4" fill="#24324a"/><path d="M42 60q8 7 16 0" stroke="#24324a" stroke-width="3.5" fill="none" stroke-linecap="round"/>`},
+    pez:{sg:"pez",pl:"peces",g:"m",svg:c=>`<path d="M14 56L2 38v40z" fill="${c}" stroke="rgba(0,0,0,.25)" stroke-width="4" stroke-linejoin="round"/>
+      <ellipse cx="54" cy="58" rx="42" ry="30" fill="${c}" stroke="rgba(0,0,0,.25)" stroke-width="4"/><circle cx="76" cy="50" r="7" fill="#fff"/><circle cx="78" cy="50" r="3.5" fill="#24324a"/>
+      <path d="M40 34q12 12 0 46" stroke="#fff" stroke-width="4" fill="none" opacity=".6"/>`}
+  };
+  const TIPOS=Object.keys(OBJ);
+  function dibujo(tipo,color,px){ return `<svg viewBox="0 0 100 100" width="${px}" height="${px}" aria-hidden="true">${OBJ[tipo].svg(color)}</svg>`; }
+  function art(o,def){ return o.g==="m"?(def?"el":"un"):(def?"la":"una"); }
+
+  // ---------- Voz ----------
+  let vozOn=true, vozElegida=null;
+  try{ vozOn=localStorage.getItem("tortuguita_tamanos_voz")!=="0"; }catch(e){}
+  function elegirVoz(){
+    if(!("speechSynthesis" in window)) return;
+    const vs=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang)); if(!vs.length) return;
+    const rank=v=>{ let p=0; const n=(v.name+" "+v.lang).toLowerCase();
+      if(/latino|latinoam|américa|america|méxico|mexico|colombia|costa rica/.test(n)) p+=6;
+      if(/es[-_](419|us|mx|co|cr|ar|cl|pe|ve)/i.test(v.lang)) p+=5;
+      if(/google/.test(n)) p+=2; if(/es[-_]es/i.test(v.lang)) p-=6; return p; };
+    vozElegida=vs.sort((a,b)=>rank(b)-rank(a))[0];
+  }
+  if("speechSynthesis" in window){ elegirVoz(); speechSynthesis.onvoiceschanged=elegirVoz; }
+  function decir(txt,alFinal){
+    let hecho=false; const fin=()=>{ if(hecho) return; hecho=true; $("#btnRepetir").classList.remove("habla"); if(alFinal) alFinal(); };
+    $("#instruccion").textContent=txt;
+    if(!vozOn||!("speechSynthesis" in window)){ fin(); return; }
+    try{
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(txt);
+      if(vozElegida){ u.voice=vozElegida; u.lang=vozElegida.lang; } else u.lang="es-419";
+      u.rate=0.88; u.pitch=1.12; u.onend=fin; u.onerror=fin;
+      $("#btnRepetir").classList.add("habla");
+      speechSynthesis.speak(u);
+      setTimeout(fin,Math.max(4000,txt.length*110));
+    }catch(e){ fin(); }
+  }
+  function pintarBtnVoz(){ const b=$("#btnVoz"); b.textContent=vozOn?"🗣️":"🔇"; b.setAttribute("aria-label",vozOn?"Silenciar voz":"Activar voz"); }
+
+  // ---------- Sonidos ----------
+  let AC=null;
+  function ac(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(AC&&AC.state==="suspended") AC.resume(); return AC; }
+  function tono(f,t0,dur,tipo,vol){ const a=ac(); if(!a) return; const o=a.createOscillator(), g=a.createGain();
+    o.type=tipo||"sine"; o.frequency.setValueAtTime(f,a.currentTime+t0);
+    g.gain.setValueAtTime(0.0001,a.currentTime+t0); g.gain.exponentialRampToValueAtTime(vol||0.25,a.currentTime+t0+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+t0+dur); o.connect(g); g.connect(a.destination);
+    o.start(a.currentTime+t0); o.stop(a.currentTime+t0+dur+0.05); }
+  const sonAcierto=()=>[523,659,784,1047].forEach((f,i)=>tono(f,i*0.09,0.25,"triangle",0.22));
+  const sonPuesto=()=>tono(660,0,0.18,"triangle",0.2);
+  function sonError(){ const a=ac(); if(!a) return; const o=a.createOscillator(), g=a.createGain(); o.type="sine";
+    o.frequency.setValueAtTime(320,a.currentTime); o.frequency.exponentialRampToValueAtTime(140,a.currentTime+0.3);
+    g.gain.setValueAtTime(0.25,a.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+0.35);
+    o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+0.4); }
+  function sonEstallido(){ const a=ac(); if(!a) return; const n=Math.floor(a.sampleRate*0.35), buf=a.createBuffer(1,n,a.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);
+    const s=a.createBufferSource(), f=a.createBiquadFilter(), g=a.createGain(); s.buffer=buf; f.type="lowpass"; f.frequency.value=1800+Math.random()*1500; g.gain.value=0.35;
+    s.connect(f); f.connect(g); g.connect(a.destination); s.start(); }
+  const sonFinal=()=>[523,659,784,659,784,1047].forEach((f,i)=>tono(f,i*0.14,0.3,"triangle",0.22));
+
+  // ---------- Fuegos artificiales (lienzo encima de todo) ----------
+  const cv=$("#fuegos"), ctx=cv.getContext("2d"); let W=0,H=0, cohetes=[], chispas=[], celebra=0; const CELEBRA_MS=3000;
+  const FUEGO_COL=["#ff4d6d","#ffd21f","#43b047","#1e6fe0","#ff8c1a","#8e44c9","#ffffff","#2ee6d6"];
+  function medir(){ const dpr=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  function lanzarFuegos(col){ celebra=CELEBRA_MS; const n=6;
+    for(let i=0;i<n;i++) cohetes.push({x:W*(0.15+0.7*(i/(n-1)))+(Math.random()-0.5)*W*0.08,y:H+10,vy:-(H*0.018+Math.random()*H*0.006),
+      meta:H*(0.14+Math.random()*0.3),retraso:i*260+Math.random()*120,c:i%2?col:FUEGO_COL[Math.floor(Math.random()*FUEGO_COL.length)]}); }
+  function estallar(k){ sonEstallido(); const m=60, v0=Math.min(W,H)*0.009;
+    for(let i=0;i<m;i++){ const a=i/m*6.283+Math.random()*0.1, v=v0*(0.55+Math.random()*0.6);
+      chispas.push({x:k.x,y:k.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,v:1.25,c:i%4===0?"#fff6c2":k.c}); } }
+  let ult=performance.now();
+  function cuadro(t){ const dt=Math.min(50,t-ult); ult=t;
+    if(celebra>0) celebra=Math.max(0,celebra-dt);
+    for(const k of cohetes){ if(k.retraso>0){ k.retraso-=dt; continue; } k.y+=k.vy*dt/16.67; k.vy*=0.992; if(k.y<=k.meta){ k.listo=true; estallar(k); } }
+    cohetes=cohetes.filter(k=>!k.listo);
+    chispas.forEach(p=>{ p.vx*=0.985; p.vy*=0.985; p.x+=p.vx*dt/16; p.y+=p.vy*dt/16; p.vy+=0.05*dt/16; p.v-=dt/1300; }); chispas=chispas.filter(p=>p.v>0);
+    ctx.clearRect(0,0,W,H);
+    if(celebra>0){ const k=Math.min(1,celebra/600,(CELEBRA_MS-celebra)/300); ctx.fillStyle="rgba(12,24,58,"+(0.42*k)+")"; ctx.fillRect(0,0,W,H); }
+    for(const k of cohetes){ if(k.retraso>0) continue; const g=ctx.createLinearGradient(k.x,k.y,k.x,k.y+H*0.08);
+      g.addColorStop(0,"rgba(255,240,180,.95)"); g.addColorStop(1,"rgba(255,240,180,0)"); ctx.strokeStyle=g; ctx.lineWidth=4; ctx.lineCap="round";
+      ctx.beginPath(); ctx.moveTo(k.x,k.y); ctx.lineTo(k.x,k.y+H*0.08); ctx.stroke(); ctx.fillStyle=k.c; ctx.beginPath(); ctx.arc(k.x,k.y,5,0,6.283); ctx.fill(); }
+    chispas.forEach(p=>{ ctx.globalAlpha=Math.max(0,Math.min(1,p.v)); ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,3.2,0,6.283); ctx.fill(); });
+    ctx.globalAlpha=1; requestAnimationFrame(cuadro); }
+
+  // ---------- Rondas ----------
+  // tipos de actividad: grande, pequeno, igual (tan grande como / tan pequeño como / igual que), orden (asc/desc)
+  const PLAN=[
+    {a:"grande",n:3},{a:"pequeno",n:3},{a:"igual",m:"grande",n:3},{a:"orden",d:"asc",n:3},{a:"grande",n:4},
+    {a:"igual",m:"pequeno",n:3},{a:"pequeno",n:4},{a:"igual",m:"medio",n:3},{a:"orden",d:"desc",n:3},{a:"orden",d:"asc",n:4}
+  ];
+  const TAMS={3:[0.5,0.75,1],4:[0.42,0.6,0.8,1]};
+  let ronda=0, R=null, estado="inicio", juegoId=0, ultTipo="";
+
+  function mezclar(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  function base(n){ // tamaño (px) del objeto más grande, según la pantalla
+    const w=innerWidth, h=innerHeight;
+    const gap=Math.min(24,Math.max(8,w*0.024));
+    const porAncho=(Math.min(w,1100)-24-(n-1)*gap)/n-16-2;
+    const porAlto=(h-150-90)/(R&&(R.a==="igual"||R.a==="orden")?2.15:1.25);
+    return Math.floor(Math.max(44,Math.min(230,porAncho,porAlto)));
+  }
+
+  function instruccion(){
+    const o=OBJ[R.tipo];
+    if(R.a==="grande") return `Toca ${art(o,true)} ${o.sg} más grande.`;
+    if(R.a==="pequeno") return `Toca ${art(o,true)} ${o.sg} más pequeñ${o.g==="m"?"o":"a"}.`;
+    if(R.a==="igual"){
+      const mira=`Mira ${o.g==="m"?"este":"esta"} ${o.sg}. `;
+      if(R.m==="grande") return mira+`Toca ${art(o,true)} que es tan grande como ${o.g==="m"?"este":"esta"}.`;
+      if(R.m==="pequeno") return mira+`Toca ${art(o,true)} que es tan pequeñ${o.g==="m"?"o":"a"} como ${o.g==="m"?"este":"esta"}.`;
+      return mira+`Toca ${art(o,true)} que es igual que ${o.g==="m"?"este":"esta"}.`;
+    }
+    const m=o.g==="m", los=m?"los":"las", de=m?"del":"de la", al=m?"al":"a la", el=m?"el":"la", peq=m?"pequeño":"pequeña";
+    return R.d==="asc" ? `Ordena ${los} ${o.pl} ${de} más ${peq} ${al} más grande. Empieza por ${el} más ${peq}.`
+                       : `Ordena ${los} ${o.pl} ${de} más grande ${al} más ${peq}. Empieza por ${el} más grande.`;
+  }
+  function buscaPrimero(){ const o=OBJ[R.tipo], m=o.g==="m";
+    return R.d==="asc" ? `Ese no. Busca ${m?"el":"la"} más ${m?"pequeño":"pequeña"}.` : `Ese no. Busca ${m?"el":"la"} más grande.`; }
+
+  function nuevaRonda(){
+    const p=PLAN[ronda];
+    let tipo; do{ tipo=TIPOS[Math.floor(Math.random()*TIPOS.length)]; }while(tipo===ultTipo); ultTipo=tipo;
+    const color=COLORES[Math.floor(Math.random()*COLORES.length)];
+    R={...p,tipo,color,puestos:0};
+    const tams=TAMS[p.n];
+    if(p.a==="igual"){
+      // el modelo tiene un tamaño; las opciones incluyen ese mismo tamaño y otros distintos
+      const iM=p.m==="grande"?2:p.m==="pequeno"?0:1; R.modelo=tams[iM];
+      R.items=mezclar(tams.map((s,i)=>({s,ok:i===iM})));
+    } else R.items=mezclar(tams.map(s=>({s})));
+    R.orden=R.items.slice().sort((a,b)=>R.d==="desc"?b.s-a.s:a.s-b.s);
+    pintar(); estado="jugando";
+    setTimeout(()=>decir(instruccion()),300);
+  }
+
+  function pintar(){
+    const esc=$("#escena"); esc.innerHTML="";
+    const B=base(R.n);
+    const o=OBJ[R.tipo];
+    if(R.a==="igual"){
+      const m=document.createElement("div"); m.className="modelo"; m.setAttribute("aria-label","Modelo");
+      m.style.width=(B+40)+"px"; m.style.height=(B+26)+"px"; m.innerHTML=dibujo(R.tipo,R.color,Math.round(B*R.modelo)); esc.appendChild(m);
+    }
+    if(R.a==="orden"){
+      const hs=document.createElement("div"); hs.className="huecos"; hs.id="huecos";
+      R.orden.forEach(()=>{ const h=document.createElement("div"); h.className="hueco"; h.style.width=(B+16)+"px"; h.style.height=(B+16)+"px"; hs.appendChild(h); });
+      esc.appendChild(hs);
+    }
+    const ops=document.createElement("div"); ops.className="opciones"; ops.id="opciones";
+    R.items.forEach(it=>{
+      const b=document.createElement("button"); b.className="obj"; b.style.width=(B+16)+"px"; b.style.height=(B+16)+"px";
+      b.innerHTML=dibujo(R.tipo,R.color,Math.round(B*it.s));
+      b.setAttribute("aria-label",`${o.sg} ${it.s>=0.99?"grande":it.s<=0.5?"pequeñ"+(o.g==="m"?"o":"a"):"mediano"}`);
+      b.addEventListener("click",()=>tocar(it,b)); it.el=b; ops.appendChild(b);
+    });
+    esc.appendChild(ops);
+    $("#progreso").innerHTML=PLAN.map((_,i)=>`<span class="${i<ronda?"hecho":""}"></span>`).join("");
+  }
+
+  function tocar(it,b){
+    if(estado!=="jugando") return; ac();
+    let ok;
+    if(R.a==="grande") ok=it===R.orden.reduce((a,c)=>c.s>a.s?c:a);
+    else if(R.a==="pequeno") ok=it===R.orden.reduce((a,c)=>c.s<a.s?c:a);
+    else if(R.a==="igual") ok=!!it.ok;
+    else ok=it===R.orden[R.puestos];
+
+    if(R.a==="orden"){
+      if(ok){
+        sonPuesto(); const h=$("#huecos").children[R.puestos]; b.classList.add("puesto"); b.style.width=""; b.style.height=""; b.style.padding="0";
+        h.appendChild(b); h.classList.add("lleno"); R.puestos++;
+        if(R.puestos===R.orden.length) bien(null); return;
+      }
+      mal(b, R.puestos===0 ? buscaPrimero() : `Ese no. Busca ${OBJ[R.tipo].g==="m"?"el":"la"} que sigue.`);
+      return;
+    }
+    if(ok) bien(b);
+    else mal(b,"Ese no. "+instruccion().replace(/^Mira [^.]+\. /,""));
+  }
+  function mal(b,txt){ sonError(); b.classList.remove("mal"); void b.offsetWidth; b.classList.add("mal"); decir(txt); }
+  function bien(b){
+    const id=juegoId; estado="pausa"; if(b) b.classList.add("bien");
+    sonAcierto(); lanzarFuegos(R.color); ronda++;
+    $("#progreso").innerHTML=PLAN.map((_,i)=>`<span class="${i<ronda?"hecho":""}"></span>`).join("");
+    // siguiente ronda solo cuando: terminó la voz Y terminaron por completo los fuegos
+    let listos=0; const seguir=()=>{ if(++listos<2) return; (function espera(){ if(id!==juegoId||estado!=="pausa") return;
+      if(cohetes.length||celebra>0) return setTimeout(espera,100); if(ronda>=PLAN.length) terminar(); else nuevaRonda(); })(); };
+    setTimeout(seguir,2800);
+    setTimeout(()=>decir("¡Muy bien!",()=>setTimeout(seguir,300)),350);
+  }
+  function terminar(){
+    estado="fin"; sonFinal(); lanzarFuegos("#ffd21f");
+    decir("¡Muy bien! Terminaste todos los juegos de tamaños.");
+    setTimeout(()=>{ $("#final").classList.remove("hidden"); $("#btnOtra").focus(); },1200);
+  }
+  function empezar(){
+    ac(); juegoId++; ronda=0; cohetes=[]; chispas=[]; celebra=0;
+    $("#inicio").classList.add("hidden"); $("#final").classList.add("hidden"); $("#juego").classList.remove("hidden");
+    nuevaRonda();
+  }
+  function aInicio(){
+    juegoId++; estado="inicio"; cohetes=[]; chispas=[]; celebra=0; try{ speechSynthesis.cancel(); }catch(e){}
+    $("#juego").classList.add("hidden"); $("#final").classList.add("hidden"); $("#inicio").classList.remove("hidden");
+  }
+
+  // ---------- Eventos ----------
+  $("#btnJugar").addEventListener("click",empezar);
+  $("#btnOtra").addEventListener("click",empezar);
+  $("#btnInicio").addEventListener("click",aInicio);
+  $("#btnCasa").addEventListener("click",aInicio);
+  $("#btnRepetir").addEventListener("click",()=>{ if(R&&estado==="jugando") decir(instruccion()); });
+  $("#btnVoz").addEventListener("click",()=>{ vozOn=!vozOn; try{ localStorage.setItem("tortuguita_tamanos_voz",vozOn?"1":"0"); }catch(e){}
+    pintarBtnVoz(); if(!vozOn){ try{ speechSynthesis.cancel(); }catch(e){} } else if(R&&estado==="jugando") decir(instruccion()); });
+  let rt; addEventListener("resize",()=>{ medir(); clearTimeout(rt); rt=setTimeout(()=>{ if(R&&estado==="jugando"&&R.puestos===0) pintar(); },150); });
+
+  // portada: tres frascos de distinto tamaño (como en el programa)
+  $("#portada").innerHTML=[[0.55,"#1e6fe0"],[0.8,"#ff8c1a"],[1,"#e53935"]].map(p=>`<svg viewBox="0 0 100 100" style="height:${p[0]*100}%" aria-hidden="true">${OBJ.frasco.svg(p[1])}</svg>`).join("");
+  pintarBtnVoz(); medir(); requestAnimationFrame(cuadro);
+  if(location.hash==="#prueba") window.__tt={R:()=>R,ronda:()=>ronda,estado:()=>estado,fx:()=>[cohetes.length,celebra,chispas.length]};
+})();
+</script>
+</body>
+</html>
