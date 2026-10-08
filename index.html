@@ -211,7 +211,8 @@
     if(!vozOn||!("speechSynthesis" in window)){ fin(); return; }
     try{
       speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(txt);
+      // «peces» con el seseo queda «peses» y algunas voces lo leen «picis»: se fuerza la pronunciación con tilde
+      const u=new SpeechSynthesisUtterance(txt.replace(/\bpeces\b/g,"péses").replace(/\bPeces\b/g,"Péses"));
       if(vozElegida){ u.voice=vozElegida; u.lang=vozElegida.lang; } else u.lang="es-419";
       u.rate=0.88; u.pitch=1.12; u.onend=fin; u.onerror=fin;
       btns.forEach(b=>b.classList.add("habla"));
